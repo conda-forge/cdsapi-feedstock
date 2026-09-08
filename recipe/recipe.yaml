@@ -1,0 +1,52 @@
+schema_version: 1
+
+context:
+  name: cdsapi
+  version: "0.7.7"
+
+package:
+  name: ${{ name|lower }}
+  version: ${{ version }}
+
+source:
+  url: https://pypi.org/packages/source/${{ name[0] }}/${{ name }}/cdsapi-${{ version }}.tar.gz
+  sha256: bc0cf807c1b78aceba6a11c3a5180f885f47f71a4e58205e324cfedcee16f10b
+
+build:
+  number: 0
+  noarch: python
+  script: ${{ PYTHON }} -m pip install . -vv
+
+requirements:
+  host:
+    - python ${{ python_min }}.*
+    - pip
+    - setuptools
+  run:
+    - ecmwf-datastores-client >=0.4.0
+    - python >=${{ python_min }}
+    - requests >=2.5.0
+    - tqdm
+
+tests:
+  - python:
+      imports:
+        - cdsapi
+      pip_check: true
+      python_version:
+        - ${{ python_min }}
+        - "*"
+
+about:
+  license: Apache-2.0
+  license_file: LICENSE.txt
+  summary: API to access the Copernicus Climate Data Store at ECMWF
+  homepage: https://software.ecmwf.int/stash/projects/CDS/repos/cdsapi
+  repository: https://github.com/ecmwf/cdsapi
+  documentation: https://cds.climate.copernicus.eu/api-how-to
+
+extra:
+  recipe-maintainers:
+    - StephanSiemen
+    - akrherz
+    - ocefpaf
